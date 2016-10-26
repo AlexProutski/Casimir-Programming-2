@@ -54,7 +54,7 @@ bins_2 = plt.hist(img,100, color='black')
 def fit_histogram(arr):
     """
     takes input array with gray scale histogram and fits a gaussian.
-    returns original array and the cut off
+    returns a value that lies two standard deviations off to brighter values
     """
     p0,fitfunc = fitting.gauss(np.max(arr),np.argmax(arr),10) ## entries are amp,x0,sigma
     res = fitting.do_fit(range(len(arr)),arr,p0,fitfunc)
@@ -89,8 +89,20 @@ def master_solver(img):
     evaluates color histogram
     fits gaussian to find cut-off of the background
     calculates area per circle
-    prints results
+    prints results (how much area is occupied by bacteria?)
     output: None
     """
-    pass
+    
+    img = grayscale(img) ## gray scale
+    
+    xs,ys,rs = find_circle_coords(img) ## find dishes
+    
+    for x,y,r in zip(xs,ys,rs):
+        cut = cut_out(img,x,y,r)
+        plt.imshow(cut*img) ### which petri dish are we checking? Need visualization
+        h = histogram(img,x,y,r)
+        brightness_cut_off = fit_histogram(h)
+        area = calculate_area(img,)
+        Print('bacterial area is '+str(np.round(area,3)))
+    
     
