@@ -33,23 +33,13 @@ plt.figure(2)
 bins = plt.hist(gh,1000)
 
 #Plot Histogram of cut-out and calculate the area
-plt.figure(1)
-r = 90
-plt.imshow(gray*gs.cut_out(gray,400,420,r), cmap = 'gray')
+def histogram(img,x,y,r)
 
-image_2 = gray*gs.cut_out(gray,410,410,r)
-im = image_2.ravel()
-img = im[np.nonzero(im)]
-remove = img>125
-img[remove]
+    image_2 = img*gs.cut_out(img,x,y,r)
+    im = image_2.ravel()
+    img = im[np.nonzero(im)]
 
-frac = len(img[remove])/len(img)
-area = frac*np.pi*r**2
-
-print(area)
-
-plt.figure(2)
-bins_2 = plt.hist(img,100, color='black')
+    return plt.hist(img,100, color='black')
 
 def fit_histogram(arr):
     """
@@ -80,7 +70,7 @@ def find_circle_coords(img):
 
 
 
-def master_solver(img):
+def master_solver(img,xs=None):
     """
     input: takes image
     converts to gray
@@ -95,7 +85,8 @@ def master_solver(img):
     
     img = grayscale(img) ## gray scale
     
-    xs,ys,rs = find_circle_coords(img) ## find dishes
+    if xs!=None:
+        xs,ys,rs = find_circle_coords(img) ## find dishes
     
     for x,y,r in zip(xs,ys,rs):
         cut = cut_out(img,x,y,r)
