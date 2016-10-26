@@ -2,9 +2,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
+import fitting
 
-#image = mpimg.imread('img/results_L3.jpg')
-#plt.imshow(image)
 
 def grayscale(rgb):
 
@@ -25,7 +24,75 @@ def cut_out(img,x,y,r):
     distancetoXY = np.sqrt((xcoords-x)**2 + (ycoords-y)**2)
     return distancetoXY < r
     
+#Plot Histogram of the entire image
+gh = gray.ravel()
+ghn = gh[np.nonzero(gh)]
+
+plt.figure(2)
+bins = plt.hist(gh,1000)
+
+#Plot Histogram of cut-out and calculate the area
+def histogram(img,x,y,r)
+
+    image_2 = img*gs.cut_out(img,x,y,r)
+    im = image_2.ravel()
+    img = im[np.nonzero(im)]
+
+    return plt.hist(img,100, color='black')
+
+def fit_histogram(arr):
+    """
+    takes input array with gray scale histogram and fits a gaussian.
+    returns a value that lies two standard deviations off to brighter values
+    """
+    p0,fitfunc = fitting.gauss(np.max(arr),np.argmax(arr),10) ## entries are amp,x0,sigma
+    res = fitting.do_fit(range(len(arr)),arr,p0,fitfunc)
+    cut_off = res['params_dict']['x0']+res['params_dict']['s']*2 # go 2 sigma away from the mean of the gaussian to get cutoff
+    #cut_arr = arr[arr>cut_off]
+    return cut_off
+
+def calculate_area(arr,cut_off):
+    """
+    takes array of gray scale values and a cutoff value
+    returns the fraction of entries that lie above the chosen cut_off.
+    """
+    return len(arr[arr>cut_off])/len(arr)
+    
+    
+
+def find_circle_coords(img):
+    """
+    takes image returns three arrays
+    x_coords, y_coords, radii
+    """
+    pass
 
 
 
-
+def master_solver(img,xs=None):
+    """
+    input: takes image
+    converts to gray
+    finds dishes
+    cuts out dishes
+    evaluates color histogram
+    fits gaussian to find cut-off of the background
+    calculates area per circle
+    prints results (how much area is occupied by bacteria?)
+    output: None
+    """
+    
+    img = grayscale(img) ## gray scale
+    
+    if xs!=None:
+        xs,ys,rs = find_circle_coords(img) ## find dishes
+    
+    for x,y,r in zip(xs,ys,rs):
+        cut = cut_out(img,x,y,r)
+        plt.imshow(cut*img) ### which petri dish are we checking? Need visualization
+        h = histogram(img,x,y,r)
+        brightness_cut_off = fit_histogram(h)
+        area = calculate_area(img,)
+        Print('bacterial area is '+str(np.round(area,3)))
+    
+    
