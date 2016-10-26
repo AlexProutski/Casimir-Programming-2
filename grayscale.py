@@ -14,5 +14,19 @@ def grayscale(rgb):
 
     return gray
 
+
+def cut_out(img,x,y,r):
+    """
+    takes x,y coordinates in terms of pixels and a radius in pixels. 
+    Cuts a boolean array that acts as cutout on the actual image.
+    """
+    [lenx,leny] = img.shape
+    xcoords = np.outer(np.array(range(lenx)),np.ones(leny))
+    ycoords = np.outer(np.ones(lenx),np.array(range(leny)))
+    distancetoXY = np.sqrt((xcoords-x)**2 + (ycoords-y)**2)
+    return distancetoXY < r
+    
 gray = grayscale(image)
 plt.imshow(gray, cmap = plt.get_cmap('gray'))
+
+plt.imshow(gray*cut_out(gray,500,500,100),cmap = plt.get_cmap('gray'))
