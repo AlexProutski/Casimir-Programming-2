@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
 
-image = mpimg.imread('img/results_L3.jpg')
+#image = mpimg.imread('img/results_L3.jpg')
 #plt.imshow(image)
 
 def grayscale(rgb):
