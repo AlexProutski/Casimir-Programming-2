@@ -5,4 +5,10 @@ def circumference(r):
     c = 2*pi*r
     return c
 
-print(circumference(6))
+def area(r):
+    pi = 3.14
+    a = pi*r**2
+    return a
+
+print('circuference:', circumference(6))
+print('area:', area(6))
