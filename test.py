@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 print('Hello World')
 
 def circumference(r):
-    pi = 3.14
-    c = 2*pi*r
-    return c
+    
+	c = 2*np.pi*r
+	return c
 
 def area(r):
     pi = 3.14
@@ -16,6 +16,8 @@ def area(r):
 print('circuference:', circumference(6))
 print('area:', area(6))
 
+def circle_area(r):
+	return np.pi*r**2
 def plotcircle(r):
     theta = np.linspace(0,2*pi,200)
     x = np.sin(theta)
@@ -24,3 +26,5 @@ def plotcircle(r):
     plt.show()
 
 print(circumference(6))
+
+print('I hate Norbert and James')
