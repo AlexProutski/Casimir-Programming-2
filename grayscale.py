@@ -5,7 +5,6 @@ import numpy as np
 import fitting
 
 image = mpimg.imread('img/results_L3.jpg')
-#plt.imshow(image)
 
 def grayscale(rgb):
 
@@ -57,15 +56,41 @@ def fit_histogram(arr):
     takes input array with gray scale histogram and fits a gaussian.
     returns original array and the cut off
     """
-    p0,fitfunc = fitting.gauss(np.max(arr),np.argmax(arr),10)
+    p0,fitfunc = fitting.gauss(np.max(arr),np.argmax(arr),10) ## entries are amp,x0,sigma
     res = fitting.do_fit(range(len(arr)),arr,p0,fitfunc)
     cut_off = res['params_dict']['x0']+res['params_dict']['s']*2 # go 2 sigma away from the mean of the gaussian to get cutoff
     #cut_arr = arr[arr>cut_off]
     return cut_off
 
 def calculate_area(arr,cut_off):
+    """
+    takes array of gray scale values and a cutoff value
+    returns the fraction of entries that lie above the chosen cut_off.
+    """
     return len(arr[arr>cut_off])/len(arr)
     
     
 
+def find_circle_coords(img):
+    """
+    takes image returns three arrays
+    x_coords, y_coords, radii
+    """
+    pass
 
+
+
+def master_solver(img):
+    """
+    input: takes image
+    converts to gray
+    finds dishes
+    cuts out dishes
+    evaluates color histogram
+    fits gaussian to find cut-off of the background
+    calculates area per circle
+    prints results
+    output: None
+    """
+    pass
+    
