@@ -1,5 +1,3 @@
-%matplotlib inline
-
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
@@ -26,7 +24,3 @@ def cut_out(img,x,y,r):
     distancetoXY = np.sqrt((xcoords-x)**2 + (ycoords-y)**2)
     return distancetoXY < r
     
-gray = grayscale(image)
-plt.imshow(gray, cmap = plt.get_cmap('gray'))
-
-plt.imshow(gray*cut_out(gray,500,500,100),cmap = plt.get_cmap('gray'))
