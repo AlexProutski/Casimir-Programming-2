@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
+import fitting
 
 image = mpimg.imread('img/results_L3.jpg')
 #plt.imshow(image)
@@ -50,5 +51,21 @@ print(area)
 
 plt.figure(2)
 bins_2 = plt.hist(img,100, color='black')
+
+def fit_histogram(arr):
+    """
+    takes input array with gray scale histogram and fits a gaussian.
+    returns original array and the cut off
+    """
+    p0,fitfunc = fitting.gauss(np.max(arr),np.argmax(arr),10)
+    res = fitting.do_fit(range(len(arr)),arr,p0,fitfunc)
+    cut_off = res['params_dict']['x0']+res['params_dict']['s']*2 # go 2 sigma away from the mean of the gaussian to get cutoff
+    #cut_arr = arr[arr>cut_off]
+    return cut_off
+
+def calculate_area(arr,cut_off):
+    return len(arr[arr>cut_off])/len(arr)
+    
+    
 
 
