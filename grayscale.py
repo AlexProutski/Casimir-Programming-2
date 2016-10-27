@@ -80,8 +80,8 @@ def master_solver(filename,xs=None,ys = None, rs = None):
     
     if xs==None:
         circles = circlefinder.find_circle_coords(filename) ## find dishes
-        xs = circles[:,0]
-        ys = circles[:,1]
+        xs = circles[:,1] # Note, different convention for x and y for Norbert and James...
+        ys = circles[:,0]
         rs = circles[:,2]
     
 
