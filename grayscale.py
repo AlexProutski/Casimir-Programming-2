@@ -58,7 +58,7 @@ def calculate_area(img,cut_off):
     takes array of gray scale values, their respective and a cutoff value
     returns the fraction of entries that lie above the chosen cut_off.
     """
-    return len(img[img>cut_off])/len(img)
+    return len(img[img>cut_off])/len(img[img>0])
     
 
 def master_solver(filename,xs=None,ys = None, rs = None):
