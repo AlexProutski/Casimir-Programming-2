@@ -2,7 +2,10 @@
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
-import fitting
+from imp import reload
+import alexREPO.fitting as fitting
+reload(fitting)
+#import circlefinder
 
 image = mpimg.imread('img/results_L3.jpg')
 
@@ -25,39 +28,38 @@ def cut_out(img,x,y,r):
     distancetoXY = np.sqrt((xcoords-x)**2 + (ycoords-y)**2)
     return distancetoXY < r
     
-#Plot Histogram of the entire image
-gh = gray.ravel()
-ghn = gh[np.nonzero(gh)]
 
-plt.figure(2)
-bins = plt.hist(gh,1000)
 
-#Plot Histogram of cut-out and calculate the area
-def histogram(img,x,y,r)
 
-    image_2 = img*gs.cut_out(img,x,y,r)
+def histogram(img,x,y,r):
+    #Plot Histogram of cut-out and calculate the area
+    image_2 = img*cut_out(img,x,y,r)
     im = image_2.ravel()
     img = im[np.nonzero(im)]
+    n,bins,patches = plt.hist(img,100, color='black')
+    return n,bins
 
-    return plt.hist(img,100, color='black')
-
-def fit_histogram(arr):
+def fit_histogram(x,n):
     """
     takes input array with gray scale histogram and fits a gaussian.
     returns a value that lies two standard deviations off to brighter values
     """
-    p0,fitfunc = fitting.gauss(np.max(arr),np.argmax(arr),10) ## entries are amp,x0,sigma
-    res = fitting.do_fit(range(len(arr)),arr,p0,fitfunc)
+    #print('give the following parameters')
+    #print(np.amax(n),x[np.argmax(n)])
+    p0,fitfunc = fitting.gauss(np.max(n),x[np.argmax(n)]+20,10) ## entries are amp,x0,sigma
+    res = fitting.do_fit(range(len(n)),n,p0,fitfunc)
     cut_off = res['params_dict']['x0']+res['params_dict']['s']*2 # go 2 sigma away from the mean of the gaussian to get cutoff
-    #cut_arr = arr[arr>cut_off]
+    plt.plot(np.array(range(250)),res['fitfunc'](np.array(range(250))),'r-')
+    plt.show()
+    print('cut off found at '+str(np.round(cut_off,3)) )
     return cut_off
 
-def calculate_area(arr,cut_off):
+def calculate_area(img,cut_off):
     """
-    takes array of gray scale values and a cutoff value
+    takes array of gray scale values, their respective and a cutoff value
     returns the fraction of entries that lie above the chosen cut_off.
     """
-    return len(arr[arr>cut_off])/len(arr)
+    return len(img[img>cut_off])/len(img)
     
     
 
@@ -70,7 +72,7 @@ def find_circle_coords(img):
 
 
 
-def master_solver(img,xs=None):
+def master_solver(img,xs=None,ys = None, rs = None):
     """
     input: takes image
     converts to gray
@@ -83,17 +85,21 @@ def master_solver(img,xs=None):
     output: None
     """
     
-    img = grayscale(img) ## gray scale
+    gray_img = grayscale(img) ## gray scale
     
-    if xs!=None:
-        xs,ys,rs = find_circle_coords(img) ## find dishes
+    #if xs!=None:
+     #   xs,ys,rs = circlefinder.find_circle_coords(img) ## find dishes
     
+    img = gray_img
     for x,y,r in zip(xs,ys,rs):
         cut = cut_out(img,x,y,r)
+        fig = plt.figure()
+        ax = plt.subplot()
         plt.imshow(cut*img) ### which petri dish are we checking? Need visualization
-        h = histogram(img,x,y,r)
-        brightness_cut_off = fit_histogram(h)
-        area = calculate_area(img,)
-        Print('bacterial area is '+str(np.round(area,3)))
+        plt.show()
+        [n,bins] = histogram(img,x,y,r)
+        brightness_cut_off = fit_histogram(bins,n)
+        area = calculate_area(img,brightness_cut_off)
+        print('bacterial area is '+str(np.round(area,3)))
     
     
