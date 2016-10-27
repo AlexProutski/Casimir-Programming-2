@@ -21,6 +21,7 @@ def gauss(gA,gx0,gs):
     A = Parameter(gA,'A')
     x0 = Parameter(gx0,'x0')
     s = Parameter(gs,'s')
+    p0 = [A,x0,s]
     def fitfunc(x):
         return A()*np.exp(-((x-x0())/s())**2)
         
@@ -103,3 +104,6 @@ def fit_line(ga):
     def fitfunc(x):
         return a()*x
     return p0,fitfunc
+
+if __name__ == '__main__':
+    pass
