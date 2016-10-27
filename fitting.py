@@ -23,7 +23,7 @@ def gauss(gA,gx0,gs):
     s = Parameter(gs,'s')
     p0 = [A,x0,s]
     def fitfunc(x):
-        return A()*np.exp(-((x-x0())/s())**2)
+        return A()*np.exp(-(x-x0())**2/(2*s())**2)
         
     return p0,fitfunc
 
@@ -66,10 +66,8 @@ def result_dict(p1, cov, info, mesg, success, x, y, p0, fitfunc):
 
 def do_fit(x,y,p0,fitfunc):
     """
-    Fitting function... thanks diamond
+    Fitting function... thanks teamdiamond
     """
-    
-    
     # convenient fitting method with parameters; see scipy cookbook for details
     def f(params):
         i = 0
@@ -87,11 +85,9 @@ def do_fit(x,y,p0,fitfunc):
     p1, cov, info, mesg, success = optimize.leastsq(f, p, full_output=True, maxfev=len(x)*100)
     if not success or cov == None: # FIXME: find a better solution!!!
         success = False
-        if VERBOSE:
-            print('ERROR: Fit did not converge !')
-            print('reason: '+str(mesg))
-        # return success    #commented out by THT and MA because it bvreaks all old automatic fitting code. 160802
-    
+        print('ERROR: Fit did not converge !')
+        print('reason: '+str(mesg))
+
     result = result_dict(p1, cov, info, mesg, success, x, y, p0, 
             fitfunc)
     # package the result neatly
