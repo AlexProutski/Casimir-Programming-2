@@ -41,12 +41,12 @@ def radfilter(rawcircles, radmin, radmax):
     newcircles = rawcircles[(rawcircles[:,2]>radmin)&(rawcircles[:,2]<radmax)]
     return newcircles
 
-def plot_circle_coords(image, circles):
+def plot_circle_coords(imagefile, circles):
     ''' Pass an array of identified circles, and the image they were found in,
     and produce an overlay that shows the circle positions.'''
 
     # get image
-    image = cv2.imread('petri.jpg')
+    image = cv2.imread(imagefile)
     output = image.copy()
     
     # ensure at least some circles were found
