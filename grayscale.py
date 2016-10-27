@@ -5,7 +5,7 @@ import numpy as np
 from imp import reload
 import alexREPO.fitting as fitting
 reload(fitting)
-#import circlefinder
+import circlefinder
 
 
 def grayscale(rgb):
@@ -78,8 +78,8 @@ def master_solver(filename,xs=None,ys = None, rs = None):
     img  = mpimg.imread(filename)
     gray_img = grayscale(img) ## gray scale
     
-    #if xs==None:
-     #   xs,ys,rs = circlefinder.find_circle_coords(filename) ## find dishes
+    if xs==None:
+        xs,ys,rs = circlefinder.find_circle_coords(filename) ## find dishes
     
     img = gray_img
     for x,y,r in zip(xs,ys,rs):
