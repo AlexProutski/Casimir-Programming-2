@@ -61,7 +61,7 @@ def calculate_area(img,cut_off):
     return len(img[img>cut_off])/len(img)
     
 
-def master_solver(filename,xs=None,ys = None, rs = None):
+def master_solver(filename,xs=None,ys = None, rs = None, radmin=80, radmax=110, houghaccumulator=0.6, searchrad=190):
     """
     input: takes image
     converts to gray
@@ -79,7 +79,7 @@ def master_solver(filename,xs=None,ys = None, rs = None):
     gray_img = grayscale(img) ## gray scale
     
     if xs==None:
-        circles = circlefinder.find_circle_coords(filename) ## find dishes
+        circles = circlefinder.find_circle_coords(filename, radmin, radmax, houghaccumulator, searchrad) ## find dishes
         xs = circles[:,1] # Note, different convention for x and y for Norbert and James...
         ys = circles[:,0]
         rs = circles[:,2]
