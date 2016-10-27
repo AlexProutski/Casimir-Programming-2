@@ -41,13 +41,15 @@ def fit_histogram(x,n):
     takes input array with gray scale histogram and fits a gaussian.
     returns a value that lies two standard deviations off to brighter values
     """
-    #print('give the following parameters')
-    #print(np.amax(n),x[np.argmax(n)])
-    p0,fitfunc = fitting.gauss(np.max(n),x[np.argmax(n)]+20,10) ## entries are amp,x0,sigma
-    res = fitting.do_fit(range(len(n)),n,p0,fitfunc)
-    cut_off = res['params_dict']['x0']+res['params_dict']['s']*2 # go 2 sigma away from the mean of the gaussian to get cutoff
-    plt.plot(np.array(range(250)),res['fitfunc'](np.array(range(250))),'r-')
+    print('give the following parameters')
+    print(np.amax(n),x[np.argmax(n)])
+    p0,fitfunc = fitting.gauss(np.max(n),x[np.argmax(n)],10) ## entries are amp,x0,sigma
+    res = fitting.do_fit(x[:-1],n,p0,fitfunc)
+    #plt.plot(np.array(range(250)),fitfunc(np.array(range(250))),'b--') # in case you want to plot your guess
+    cut_off = res['params_dict']['x0']+res['params_dict']['s']*5 # go 5 sigma away from the mean of the gaussian to get cutoff
+    plt.plot(np.array(range(250)),res['fitfunc'](np.array(range(250))),'r-',zorder=100)
     plt.show()
+    print('x0 and s '+ str(res['params_dict']['x0'])+' ' + str(res['params_dict']['s']))
     print('cut off found at '+str(np.round(cut_off,3)) )
     return cut_off
 
@@ -58,16 +60,6 @@ def calculate_area(img,cut_off):
     """
     return len(img[img>cut_off])/len(img)
     
-    
-
-def find_circle_coords(img):
-    """
-    takes image returns three arrays
-    x_coords, y_coords, radii
-    """
-    pass
-
-
 
 def master_solver(filename,xs=None,ys = None, rs = None):
     """
@@ -81,10 +73,12 @@ def master_solver(filename,xs=None,ys = None, rs = None):
     prints results (how much area is occupied by bacteria?)
     output: None
     """
+    
+    
     img  = mpimg.imread(filename)
     gray_img = grayscale(img) ## gray scale
     
-    #if xs!=None:
+    #if xs==None:
      #   xs,ys,rs = circlefinder.find_circle_coords(filename) ## find dishes
     
     img = gray_img
