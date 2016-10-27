@@ -72,7 +72,7 @@ def find_circle_coords(img):
 
 
 
-def master_solver(img,xs=None,ys = None, rs = None):
+def master_solver(filename,xs=None,ys = None, rs = None):
     """
     input: takes image
     converts to gray
@@ -84,11 +84,11 @@ def master_solver(img,xs=None,ys = None, rs = None):
     prints results (how much area is occupied by bacteria?)
     output: None
     """
-    
+    img  = mpimg.imread(filename)
     gray_img = grayscale(img) ## gray scale
     
     #if xs!=None:
-     #   xs,ys,rs = circlefinder.find_circle_coords(img) ## find dishes
+     #   xs,ys,rs = circlefinder.find_circle_coords(filename) ## find dishes
     
     img = gray_img
     for x,y,r in zip(xs,ys,rs):
