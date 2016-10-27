@@ -32,13 +32,13 @@ plt.figure(2)
 bins = plt.hist(gh,1000)
 
 #Plot Histogram of cut-out and calculate the area
-def histogram(img,x,y,r)
-
-    image_2 = img*gs.cut_out(img,x,y,r)
-    im = image_2.ravel()
+def histogram(image, x, y, radius):
+    
+    image = grayscale(image)*gs.cut_out(grayscale(image),x,y,radius)
+    im = image.ravel()
     img = im[np.nonzero(im)]
-
-    return plt.hist(img,100, color='black')
+    bins = plt.hist(img,100, color='black')
+    return bins
 
 def fit_histogram(arr):
     """
