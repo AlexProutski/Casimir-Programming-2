@@ -24,17 +24,9 @@ def cut_out(img,x,y,r):
     distancetoXY = np.sqrt((xcoords-x)**2 + (ycoords-y)**2)
     return distancetoXY < r
     
-#Plot Histogram of the entire image
-gh = gray.ravel()
-ghn = gh[np.nonzero(gh)]
-
-plt.figure(2)
-bins = plt.hist(gh,1000)
-
-#Plot Histogram of cut-out and calculate the area
 def histogram(image, x, y, radius):
     
-    image = grayscale(image)*gs.cut_out(grayscale(image),x,y,radius)
+    image = grayscale(image)*cut_out(grayscale(image),x,y,radius)
     im = image.ravel()
     img = im[np.nonzero(im)]
     bins = plt.hist(img,100, color='black')
