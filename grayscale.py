@@ -7,7 +7,6 @@ import alexREPO.fitting as fitting
 reload(fitting)
 #import circlefinder
 
-image = mpimg.imread('img/results_L3.jpg')
 
 def grayscale(rgb):
 
@@ -28,6 +27,7 @@ def cut_out(img,x,y,r):
     distancetoXY = np.sqrt((xcoords-x)**2 + (ycoords-y)**2)
     return distancetoXY < r
     
+<<<<<<< HEAD
 
 
 
@@ -40,6 +40,17 @@ def histogram(img,x,y,r):
     return n,bins
 
 def fit_histogram(x,n):
+=======
+def histogram(image, x, y, radius):
+    
+    image = grayscale(image)*cut_out(grayscale(image),x,y,radius)
+    im = image.ravel()
+    img = im[np.nonzero(im)]
+    bins = plt.hist(img,100, color='black')
+    return bins
+
+def fit_histogram(arr):
+>>>>>>> 95bcf5ad12a0ca2029ec59ca30fcadd8d60ef968
     """
     takes input array with gray scale histogram and fits a gaussian.
     returns a value that lies two standard deviations off to brighter values
