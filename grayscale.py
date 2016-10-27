@@ -5,7 +5,7 @@ import numpy as np
 from imp import reload
 import alexREPO.fitting as fitting
 reload(fitting)
-import alexREPO.circlefinder as circlefinder
+#import circlefinder
 
 
 def grayscale(rgb):
@@ -78,15 +78,12 @@ def master_solver(filename,xs=None,ys = None, rs = None):
     img  = mpimg.imread(filename)
     gray_img = grayscale(img) ## gray scale
     
-    if xs==None:
-        circles = circlefinder.find_circle_coords(filename) ## find dishes
-        xs = circles[:,1] # Note, different convention for x and y for Norbert and James...
-        ys = circles[:,0]
-        rs = circles[:,2]
+    #if xs==None:
+     #   xs,ys,rs = circlefinder.find_circle_coords(filename) ## find dishes
     
-
     img = gray_img
-    for x,y,r in zip(xs,ys,rs):
+    areas = np.zeros(len(xs))
+    for i,x,y,r in zip(range(len(xs)),xs,ys,rs):
         cut = cut_out(img,x,y,r)
         fig = plt.figure()
         ax = plt.subplot()
@@ -96,5 +93,16 @@ def master_solver(filename,xs=None,ys = None, rs = None):
         brightness_cut_off = fit_histogram(bins,n)
         area = calculate_area(img,brightness_cut_off)
         print('bacterial area is '+str(np.round(area,3)))
+        areas[i] = np.round(area,3)
+        
+    ### finally return the initial image and add our text at the right coordiantes (centre of the circles)
+    fig = plt.figure()
+    ax = plt.subplot()
+    plt.imshow(img,cmap='gray')
+    for x,y,area in zip(xs,ys,areas):
+        
+        ax.text(y,x, str(area*100)+' %', style='italic',
+                bbox={'facecolor':'red', 'alpha':0.5, 'pad':1})
+    plt.show()
     
     
