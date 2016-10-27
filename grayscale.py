@@ -45,7 +45,7 @@ def fit_histogram(x,n):
     p0,fitfunc = fitting.gauss(np.max(n),x[np.argmax(n)],10) ## entries are amp,x0,sigma
     res = fitting.do_fit(x[:-1],n,p0,fitfunc)
     #plt.plot(np.array(range(250)),fitfunc(np.array(range(250))),'b--') # in case you want to plot your guess
-    cut_off = res['params_dict']['x0']+res['params_dict']['s']*5 # go 5 sigma away from the mean of the gaussian to get cutoff
+    cut_off = res['params_dict']['x0']+res['params_dict']['s']*3 # go 5 sigma away from the mean of the gaussian to get cutoff
     plt.plot(np.array(range(250)),res['fitfunc'](np.array(range(250))),'r-',zorder=100)
     plt.show()
     print('x0 and s '+ str(res['params_dict']['x0'])+' ' + str(res['params_dict']['s']))
@@ -60,7 +60,7 @@ def calculate_area(img,cut_off):
     return len(img[img>cut_off])/len(img[img>0])
     
 
-def master_solver(filename,xs=None,ys = None, rs = None, radmin=80, radmax=110, houghaccumulator=0.6, searchrad=190):
+def master_solver(filename,xs=None,ys = None, rs = None, radmin=80, radmax=110, houghaccumulator=0.6, searchrad=190, radiusreduction=0):
     """
     input: takes image
     converts to gray
@@ -83,6 +83,8 @@ def master_solver(filename,xs=None,ys = None, rs = None, radmin=80, radmax=110, 
         xs = circles[:,1] # Note, different convention for x and y for Norbert and James...
         ys = circles[:,0]
         rs = circles[:,2]
+
+        rs = rs-radiusreduction
     
     img = gray_img
     areas = np.zeros(len(xs))
@@ -94,7 +96,7 @@ def master_solver(filename,xs=None,ys = None, rs = None, radmin=80, radmax=110, 
         plt.show()
         [n,bins] = histogram(img,x,y,r)
         brightness_cut_off = fit_histogram(bins,n)
-        area = calculate_area(img,brightness_cut_off)
+        area = calculate_area(cut*img,brightness_cut_off)
         print('bacterial area is '+str(np.round(area,3)))
         areas[i] = np.round(area,3)
         
