@@ -5,8 +5,7 @@ import numpy as np
 from imp import reload
 import alexREPO.fitting as fitting
 reload(fitting)
-import alexREPO.circlefinder
-
+import alexREPO.circlefinder as circlefinder
 
 def grayscale(rgb):
 
